@@ -28,3 +28,23 @@ class Visit(models.Model):
                 if self.leaved_at else 'not leaved'
             )
         )
+    
+
+from datetime import timedelta
+from django.utils import timezone
+
+
+def get_duration(visit):
+    end_time = visit.leaved_at or timezone.now()
+    return end_time - visit.entered_at
+
+
+def format_duration(duration):
+    total_seconds = int(duration.total_seconds())
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return f'{hours}:{minutes:02}:{seconds:02}'
+
+
+def is_visit_long(visit, minutes=60):
+    return get_duration(visit) > timedelta(minutes=minutes)
