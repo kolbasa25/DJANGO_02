@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.db import models
+from django.utils import timezone
 
 
 class Passcard(models.Model):
@@ -10,7 +13,7 @@ class Passcard(models.Model):
     def __str__(self):
         if self.is_active:
             return self.owner_name
-        return f'{self.owner_name} (inactive)'
+        return f"{self.owner_name} (inactive)"
 
 
 class Visit(models.Model):
@@ -20,18 +23,11 @@ class Visit(models.Model):
     leaved_at = models.DateTimeField(null=True)
 
     def __str__(self):
-        return '{user} entered at {entered} {leaved}'.format(
+        return "{user} entered at {entered} {leaved}".format(
             user=self.passcard.owner_name,
             entered=self.entered_at,
-            leaved=(
-                f'leaved at {self.leaved_at}'
-                if self.leaved_at else 'not leaved'
-            )
+            leaved=(f"leaved at {self.leaved_at}" if self.leaved_at else "not leaved"),
         )
-    
-
-from datetime import timedelta
-from django.utils import timezone
 
 
 def get_duration(visit):
@@ -43,7 +39,7 @@ def format_duration(duration):
     total_seconds = int(duration.total_seconds())
     hours, remainder = divmod(total_seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
-    return f'{hours}:{minutes:02}:{seconds:02}'
+    return f"{hours}:{minutes:02}:{seconds:02}"
 
 
 def is_visit_long(visit, minutes=60):
