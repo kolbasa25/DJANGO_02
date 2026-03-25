@@ -1,17 +1,16 @@
-from datacenter.models import (
-    Passcard,
-    Visit,
+from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
+
+from datacenter.models import Passcard, Visit
+from datacenter.visit_services import (
     get_duration,
     format_duration,
     is_visit_long,
 )
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
 
 
 def passcard_info_view(request, passcode):
     this_passcard = get_object_or_404(Passcard, passcode=passcode)
-
     this_passcard_visits = Visit.objects.filter(passcard=this_passcard)
 
     formatted_visits = []
